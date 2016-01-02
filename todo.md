@@ -4,7 +4,7 @@
 
 0. Figure out how to make the compiled info in the "dynamic" directive act as normal html, so that it doesn't get all weird
     maybe add $sce.trustAsHtml(html) to the ele.html() comand.  That command is setting the contents of ele, then the $compile command compiles it.  So whatever is in ele.html should be true html (??)
-0. Extract data and populate `table` varialble, then build html with dynamic injections of `table` properties.  This will allow it to work with angular xeditable
+0. change theming for angular xeditable cells
 1. Add animations between views
 2. Adjust colors/theme for app (bootstrap)
 
@@ -16,12 +16,13 @@
     5. add cell padding
     6. decrease font size
 6. integrate angular xeditable
-    1. make cell contents editable
     2. add ability to adjust text-alignment
     3. Add ability to insert Greek characters into text (?)
     4. Add ability to add footnotes (maybe won't requite xeditable?)
+    1. ~~make cell contents editable~~
 7. Make a demo/how-to view, that walks people through how to work the app
 8. Add support for uploading files
+0. ~~Extract data and populate `table` varialble, then build html with dynamic injections of `table` properties.  This will allow it to work with angular xeditable~~
 0. ~~Add popover to "Upload File" button saying "Coming soon, not currently supported"~~
 3. ~~Instead of styling each cell, add generic classes.  This will help with editing individual cells (I think)~~ 
 4. ~~In `pages/view2.html`, change "enter different data" to be button at top with "back" icon~~
