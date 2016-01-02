@@ -1,0 +1,40 @@
+{
+  "name": "GSA-Table-Formatter",
+  "version": "1.9.1",
+  "description": "Formats data tables to meet Geological Society of America (GSA) standards",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "~3.9.0",
+    "gulp-changed": "~1.3.0",
+    "gulp-concat": "~2.6.0",
+    "gulp-htmlmin": "~1.3.0",
+    "gulp-jshint": "~2.0.0",
+    "gulp-minify-css": "~1.2.3",
+    "gulp-sass": "~2.1.1",
+    "gulp-uglify": "~1.5.1",
+    "express": "~4.13.3"
+  },
+  "devDependencies": {
+    "gulp": "~3.9.0",
+    "gulp-changed": "~1.3.0",
+    "gulp-concat": "~2.6.0",
+    "gulp-htmlmin": "~1.3.0",
+    "gulp-jshint": "~2.0.0",
+    "gulp-minify-css": "~1.2.3",
+    "gulp-sass": "~2.1.1",
+    "gulp-uglify": "~1.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edauenhauer/gsatf.git"
+  },
+  "author": "Eric Dauenhauer",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/edauenhauer/gsatf/issues"
+  }
+}

@@ -1,0 +1,6 @@
+node_modules
+.vscode
+fonts
+cgi-bin
+*.log
+dist

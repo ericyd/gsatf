@@ -1,0 +1,70 @@
+<div>
+    <div id="controls" class="col-md-12">
+        <div class="page-header">
+            <h1>Select your data <small>Upload file, or copy & paste</small></h1>
+        </div>
+        <!--upload data button-->
+        <a  custom-popover class="btn btn-primary btn-lg" 
+            tabindex="0"
+            popover-html="upload" 
+            popover-placement="top"
+            popover-trigger="focus" 
+            role="button">Upload file</a>
+
+        &nbsp;&nbsp;
+        
+        <!--Copy & Paste data button-->
+        <a  custom-popover class="btn btn-primary btn-lg" 
+            tabindex="0"
+            popover-html="copyPaste" 
+            popover-placement="right"
+            popover-trigger="click" 
+            role="button">Copy &amp; paste data</a>
+            
+        <!--Which should I choose button-->
+        <h3><a custom-popover class="btn" 
+            tabindex="0"
+            popover-html="whichOne" 
+            popover-placement="right" 
+            popover-trigger="focus"
+            role="button">Which should I choose <i class="glyphicon glyphicon-question-sign"></i>
+            </a></h3>
+
+    </div>
+    <!--//#controls-->
+    
+    <!-- Popover definitions -->
+    <div id="copy-paste_popover_content" style="display:none;"  >
+        <textarea id="textBox" type="text" ng-model="textarea"></textarea><br />
+        <a id="submitDataBtn" class="btn" ng-click="click()" type="button">Submit</a>
+        <a id="close" class="btn" ng-click="close()" type="button">cancel</a>
+    </div>
+    
+    <div id="which-one_popover_content" style="display:none;">
+        <p>If you have an existing spreadsheet (e.g. Excel) 
+        that is laid out with your data, simply Upload File.  If you 
+        need to make a few adjustments, or if the data is part of a 
+        larger spreadsheet, use Copy & Paste
+        </p>
+    </div>
+    
+    <div id="upload_popover_content" style="display:none;">
+        <p>This option is not yet supported.  
+            Please open the file and use the Copy &amp; Paste feature.
+        </p>
+    </div>
+    
+</div>
+
+
+
+
+
+
+    <!--                        
+    <br><br><br><br><br><br>
+    <div id="put"></div>
+    <div ng-bind-html="trStyle"></div>
+    <table cellspacing=0 ><tr><td  style='border-bottom:1px solid #000; padding:2em;'>This is a border tr</td><td  style='border-bottom:1px solid #000;'>This is a border tr</td><td  style='border-bottom:1px solid #000;'>This is a border tr</td><td  style='border-bottom:1px solid #000;'>This is a border tr</td><td  style='border-bottom:1px solid #000;'>This is a border tr</td></tr></table>
+    <div ng-bind-html="divStyle"></div>
+    -->
