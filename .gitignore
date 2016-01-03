@@ -4,3 +4,4 @@ fonts
 cgi-bin
 *.log
 dist
+angular-xeditable-0.1.8
