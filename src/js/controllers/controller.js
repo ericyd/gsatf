@@ -6,8 +6,8 @@ var gsatf = angular.module("gsaTableFormatter", ['ngRoute', 'xeditable']);
 /*
 CONTROLLER
 */
-gsatf.controller("SimpleController", ['$scope', 'gsatfFactory', '$sce', '$location', '$compile',
-    function ($scope, gsatfFactory, $sce, $location, $compile) {
+gsatf.controller("SimpleController", ['$scope', 'gsatfFactory', '$sce', '$location',
+    function ($scope, gsatfFactory, $sce, $location) {
         // the $scope variable is the "glue" between the controller (this function) and the View (the html page)
         // by "injecting" the $scope into the controller, it makes it accessible from the view (as long as I use the ng-controller directive in the view)
         $scope.table = gsatfFactory.getTable();
@@ -23,7 +23,7 @@ gsatf.controller("SimpleController", ['$scope', 'gsatfFactory', '$sce', '$locati
             $('#submitDataBtn').popover('hide');
         };
         
-        $scope.test = {one: "this"};
+        $scope.user = {name: $sce.trustAsHtml("eric<br>dauenhauer")};
         
     }]);
 
