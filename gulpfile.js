@@ -17,7 +17,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('watch', function(){
-    var watcher = gulp.watch(['src/**/*'], ['js', 'css', 'html']);
+    var watcher = gulp.watch(['src/**/*'], ['build']);
     watcher.on('change', function (event) {
         console.log('Event type: ' + event.type); // added, changed, or deleted
         console.log('Event path: ' + event.path); // The path of the modified file
