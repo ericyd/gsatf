@@ -6,7 +6,7 @@ Then navigate to http://localhost:8080/<filename> e.g. http://localhost:8080/ind
 
 var express = require('express'),
     app = express();
-process.stdout.write("hello: ");
+console.log('go to localhost:8080/<filename>');
 
 app.use(express.static(__dirname + ''));
 
