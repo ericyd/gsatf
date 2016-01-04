@@ -4,16 +4,23 @@ MODULE
 var gsatf = angular.module("gsaTableFormatter", ['ngRoute', 'xeditable']);
 
 /*
+options for xeditable
+
+gsatf.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
+*/
+
+/*
 CONTROLLER
 */
-gsatf.controller("SimpleController", ['$scope', 'gsatfFactory', '$sce', '$location',
-    function ($scope, gsatfFactory, $sce, $location) {
-        // the $scope variable is the "glue" between the controller (this function) and the View (the html page)
-        // by "injecting" the $scope into the controller, it makes it accessible from the view (as long as I use the ng-controller directive in the view)
+gsatf.controller("SimpleController", ['$scope', 'gsatfFactory', '$location',
+    function ($scope, gsatfFactory, $location) {
+        
         $scope.table = gsatfFactory.getTable();
         $scope.tableHtml = gsatfFactory.buildHtml();
         
-        $scope.click = function() {
+        $scope.processData = function() {
             $scope.table = gsatfFactory.extractData($scope.textarea);
             $scope.tableHtml = gsatfFactory.buildHtml();
             $location.path('view2');
@@ -22,8 +29,6 @@ gsatf.controller("SimpleController", ['$scope', 'gsatfFactory', '$sce', '$locati
         $scope.close = function() {
             $('#submitDataBtn').popover('hide');
         };
-        
-        $scope.user = {name: $sce.trustAsHtml("eric<br>dauenhauer")};
         
     }]);
 
@@ -45,10 +50,3 @@ gsatf.config(['$routeProvider', function ($routeProvider) {
         
 }]);
 
-/*
-options for xeditable
-
-gsatf.run(function(editableOptions) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-});
-*/
