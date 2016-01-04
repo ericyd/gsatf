@@ -8,7 +8,12 @@ var gulp = require('gulp'),
     cssmin = require('gulp-minify-css'),
     changed = require('gulp-changed'),
     sass = require('gulp-sass'),
-    dest = 'dist';
+    browserify = require('browserify'),
+    globby = require('globby'),
+    buffer = require('vinyl-buffer'),
+    source = require('vinyl-source-stream'),
+    through = require('through2')
+    dest = './dist';
     
 
 
@@ -17,22 +22,63 @@ gulp.task('default', function() {
 });
 
 gulp.task('watch', function(){
-    var watcher = gulp.watch(['src/**/*'], ['build']);
+    var watcher = gulp.watch(['./src/**/*'], ['build']);
     watcher.on('change', function (event) {
         console.log('Event type: ' + event.type); // added, changed, or deleted
         console.log('Event path: ' + event.path); // The path of the modified file
     });
 });
 
+gulp.task('browserify', function() {
+    globby(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js']).then(function(entries) {
+        var b = browserify({
+            entries: ['./src/js/requires.js'],
+            debug: true
+        });
+        
+        return b.bundle()
+        .pipe(source('appbundle2.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(concat('appbundle.js'))
+        .pipe(gulp.dest('dist/js')); 
+    });
+    
+});
+
+gulp.task('test', function() {
+    
+        var b = browserify({
+            entries: ['./src/js/requires.js'],
+            debug: true
+        });
+        
+        return b.bundle()
+        .pipe(source('app.js'))
+        .pipe(buffer())
+        //.pipe(uglify())
+        .pipe(concat('app.js'))
+        .pipe(gulp.dest('./src/js')); 
+      
+        
+        
+
+
+    });
+    
 
 // gulp tasks can be called with `gulp <taskName>` where <taskName> is the first argument of gulp.task    
 gulp.task('js', function() {
     // define what the task 'minify' actually does
-    gulp.src('src/js/assets/*.js', { base: 'src' })
+    gulp.src('./src/js/assets/*.js', { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
-    // read for more detail http://www.smashingmagazine.com/2014/06/building-with-gulp/
-    return gulp.src(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js'])
+    // "globby" replaces the normal "gulp.src" as Browserify
+    // creates it's own readable stream.
+    //globby(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js']).then(function(entries) {
+        // create the Browserify instance.
+
+    return gulp.src(['./src/js/controllers/*.js', './src/js/directives/*.js', './src/js/factories/*.js'])
         // only continues with files that have changed
         //.pipe(changed(dest))
         // looks for errors and prints them
@@ -50,14 +96,14 @@ gulp.task('js', function() {
 gulp.task('css', function() {
     // define what the task 'minify' actually does
     // move unchaged files to final location
-    gulp.src('src/css/**/*.min.css', { base: 'src' })
+    gulp.src('./src/css/**/*.min.css', { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
-    gulp.src(['src/css/**/*.css', '!src/css/**/*.min.css'], { base: 'src' })
+    gulp.src(['./src/css/**/*.css', '!./src/css/**/*.min.css'], { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
     // read for more detail http://www.smashingmagazine.com/2014/06/building-with-gulp/
-    return gulp.src(['src/css/**/*.scss', '!src/css/**/*.min.css'], { base: 'src' })
+    return gulp.src(['./src/css/**/*.scss', '!./src/css/**/*.min.css'], { base: 'src' })
         .pipe(changed(dest))
         .pipe(sass())
         .pipe(cssmin())
@@ -67,7 +113,7 @@ gulp.task('css', function() {
 
 gulp.task('html', function() {
     
-    return gulp.src('src/**/*.html', { base: 'src' })
+    return gulp.src('./src/**/*.html', { base: 'src' })
         .pipe(changed(dest))
         .pipe(htmlmin({
             collapseWhitespace: true,
