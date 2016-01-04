@@ -2,19 +2,18 @@
 
 ### GSATF work
 
-0. Figure out how to make the compiled info in the "dynamic" directive act as normal html, so that it doesn't get all weird
-    maybe add $sce.trustAsHtml(html) to the ele.html() comand.  That command is setting the contents of ele, then the $compile command compiles it.  So whatever is in ele.html should be true html (??)
 0. change theming for angular xeditable cells
 1. Add animations between views
 2. Adjust colors/theme for app (bootstrap)
-
+3. css 
+    1. Rename css styles for cells to make them more intuitive
 5. Finish parser
     1. Parse footnotes on each cell, denoted either by \*1, \*2, \*3 etc or ^1 ^2 ^3 etc
     2. parse headings with sub-headings (e.g. Coords [Lat, Long]) with syntax where [el1, el2, el3] indicates sub-heads
     3. First column of TDs should be text-align: left, not center
     4. make "#" characters comments.  Make "//" an automatic table "Note" (see #12 in booktable.pdf).  Also make "Note:etc." a footnote if row.length == 1
-    5. add cell padding
-    6. decrease font size
+    5. ~~add cell padding~~
+    6. ~~decrease font size~~
 6. integrate angular xeditable
     2. add ability to adjust text-alignment
     3. Add ability to insert Greek characters into text (?)
