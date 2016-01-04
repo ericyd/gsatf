@@ -45,42 +45,14 @@ gulp.task('browserify', function() {
     });
     
 });
-
-gulp.task('test', function() {
     
-        var b = browserify({
-            entries: ['./src/js/requires.js'],
-            debug: true
-        });
-        
-        return b.bundle()
-        .pipe(source('app.js'))
-        .pipe(buffer())
-        //.pipe(uglify())
-        .pipe(concat('app.js'))
-        .pipe(gulp.dest('./src/js')); 
-      
-        
-        
-
-
-    });
-    
-
-// gulp tasks can be called with `gulp <taskName>` where <taskName> is the first argument of gulp.task    
 gulp.task('js', function() {
     // define what the task 'minify' actually does
     gulp.src('./src/js/assets/*.js', { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
-    // "globby" replaces the normal "gulp.src" as Browserify
-    // creates it's own readable stream.
-    //globby(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js']).then(function(entries) {
-        // create the Browserify instance.
 
     return gulp.src(['./src/js/controllers/*.js', './src/js/directives/*.js', './src/js/factories/*.js'])
-        // only continues with files that have changed
-        //.pipe(changed(dest))
         // looks for errors and prints them
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
@@ -94,7 +66,6 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function() {
-    // define what the task 'minify' actually does
     // move unchaged files to final location
     gulp.src('./src/css/**/*.min.css', { base: 'src' })
         .pipe(changed(dest))
@@ -102,7 +73,6 @@ gulp.task('css', function() {
     gulp.src(['./src/css/**/*.css', '!./src/css/**/*.min.css'], { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
-    // read for more detail http://www.smashingmagazine.com/2014/06/building-with-gulp/
     return gulp.src(['./src/css/**/*.scss', '!./src/css/**/*.min.css'], { base: 'src' })
         .pipe(changed(dest))
         .pipe(sass())
