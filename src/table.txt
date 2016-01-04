@@ -1,7 +1,11 @@
-Table 1. This is a table of trivial values
-SiO2 (%)	Al2O3 (%)	TiO2 (%)	CaO2 (%)	MgO2 (%)
-8.2	1.2	5.3	1.5	1.8
-45.3	2.5	2.6	0.2	10.5
-65.2	3.4	8.7	0.06	62.3
-20.1	1.8	5.4	2.5	40.2
-18.9	1.1	2.3	4.8	10.7
+# Data was collected in Portland, OR					
+// This is a general note about the data – it will go at the bottom					
+Table 1. Trivial values for a trivial table					
+SiO2 (%)	Al2O3 (%)	TiO2 (%)	CaO2 (%)	Location (deg) [Lat (deg), Long (deg)]	
+8.2	1.2	5.3	1.5	45.2231	-121.5855
+45.3	2.5	2.6	0.2	56.2321	-115.2624
+this is a sub-heading to distinguish a certain thing					
+65.2	3.4	8.7	0.06	46.6262	-131.526
+20.1	1.8	5.4	this value is a test value to test wrapping of text	50.223	-111.2605
+18.9			4.8	60.56151	-98.2132
+sdfsd				sdf (34543)	

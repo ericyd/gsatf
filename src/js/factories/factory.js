@@ -81,8 +81,15 @@ gsatf.factory("gsatfFactory", function() {
             // test the heading for subheads
             if ( reSubhead.test(headers[j]) ) {
                 table.headers[0][j] = headers[j].slice(0, headers[j].search(reSubhead));
-                table.headers[2][j] = headers[j].match(reSubhead)[0];
+                table.headers[2][j] = headers[j].match(reSubhead)[0].split(",");
                 css.nRows = 2;
+                for (var i = 0; i < table.headers[2][j].length; i++) {
+                    if ( reDimension.test(table.headers[2][j][i]) ) {
+                        table.headers[3][j] = [];
+                        table.headers[3][j][i] = table.headers[2][j][i].match(reDimension)[0];
+                        table.headers[2][j][i] = table.headers[2][j][i].slice(0, table.headers[2][j][i].search(reDimension));
+                    }
+                }
             } else {
                 table.headers[0][j] = headers[j];
             }
@@ -91,12 +98,6 @@ gsatf.factory("gsatfFactory", function() {
             if ( reDimension.test(headers[j]) ) {
                 table.headers[1][j] = table.headers[0][j].match(reDimension)[0];
                 table.headers[0][j] = table.headers[0][j].slice(0, headers[j].search(reDimension));
-            }
-            
-            // test the subhead for dimensions
-            if ( reDimension.test(table.headers[2][j]) ) {
-                table.headers[3][j] = table.headers[2][j].match(reDimension)[0];
-                table.headers[2][j] = table.headers[2][j].slice(0, table.headers[2][j].search(reDimension));
             }
             
         }
@@ -142,7 +143,7 @@ gsatf.factory("gsatfFactory", function() {
             // if there are subheadings
             if (table.headers[2][j] !== undefined) {
                 // no rowspan
-                headers += sprintf("<td id='%s' class='%s %s'>", id, css.center, css.trBreak);
+                headers += sprintf("<td colspan=%i id='%s' class='%s %s'>", table.headers[2][j].length, id, css.center, css.trBreak);
             } else {
                 // yes rowspan
                 headers += sprintf("<td rowspan=%i id='%s' class='%s %s'>", css.nRows, id, css.center, css.trBreak);
@@ -156,20 +157,27 @@ gsatf.factory("gsatfFactory", function() {
                 headers += sprintf("<br /><span editable-text='table.headers[1][%i]'>{{ table.headers[1][%i] }}</span>", j, j);
             }
             
-            
+                            
             // if there are subheadings
             if (table.headers[2][j] !== undefined) {
-                
+                                
                 // add second row (subheading)
                 headers += "<tr>";
-                headers += sprintf("<td class='%(center)s %(trBreak)s'>", css);
-                headers += sprintf("<span editable-text='table.headers[2][%i]'>{{ table.headers[2][%i] }}</span>", j, j);
                 
-                // if there is a corresponding dimension for the subheader, print it on a separate line
-                if (table.headers[3][j] !== undefined ) {
-                    headers += sprintf("<br /><span editable-text='table.headers[3][%i]'>{{ table.headers[3][%i] }}</span>", j, j);
+                // iterate through items in subheadings array
+                
+                for (var i = 0; i < table.headers[2][j].length; i++) {
+                    
+                    headers += sprintf("<td class='%(center)s %(trBreak)s'>", css);
+                    headers += sprintf("<span editable-text='table.headers[2][%i][%i]'>{{ table.headers[2][%i][%i] }}</span>", j, i, j, i);
+                    
+                    // if there is a corresponding dimension for the subheader, print it on a separate line
+                    if (table.headers[3][j] !== undefined ) {
+                        headers += sprintf("<br /><span editable-text='table.headers[3][%i]'>{{ table.headers[3][%i] }}</span>", j, j);
+                    }                    
                 }
                 
+
                 headers += "</tr>";    
             } 
             
@@ -196,7 +204,7 @@ gsatf.factory("gsatfFactory", function() {
 
                 if (table.body[i].length == 1) {
                     var id = i < 10 ? "0" + i.toString() + "00" : i.toString();
-                    bodyHtml += sprintf("<td id='%s' colspan='%s' class='%s %s'><span editable-text='table.body[%i][0]'>", id, css.nCols, css.tdSubhead, i);
+                    bodyHtml += sprintf("<td id='%s' colspan='%s' class='%s %s'><span editable-text='table.body[%s][0]'>", id, css.nCols, css.tdSubhead, i);
                     bodyHtml += "{{ table.body[" + i + "][0] }}" + "</span></td></tr>";
                     continue;
                 }

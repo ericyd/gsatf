@@ -57,7 +57,7 @@ gulp.task('js', function() {
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         // minifies the contents with uglify
-        .pipe(uglify())
+        //.pipe(uglify())
         // concatenates all js files into one main file named 'main.js'
         .pipe(concat('app.js'))
         // pipes the output to the destination folder
