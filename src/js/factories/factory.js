@@ -176,13 +176,15 @@ gsatf.factory("gsatfFactory", function() {
         for (var i = 0; i < table.headers.heads.length; i++) {
             var id = i < 10 ? "010" + i.toString() : "01" + i.toString();
             
+            var textAlign = i == 0 ? css.left : css.center;
+            
             // if there are subheadings
             if (table.headers.subheads[i] !== undefined) {
                 // no rowspan
-                headers += sprintf("<td colspan=%i id='%s' class='%s %s'>", table.headers.subheads[i].length, id, css.center, css.trBreak);
+                headers += sprintf("<td colspan=%i id='%s' class='%s %s'>", table.headers.subheads[i].length, id, textAlign, css.trBreak);
             } else {
                 // yes rowspan
-                headers += sprintf("<td rowspan=%i id='%s' class='%s %s'>", css.nRows, id, css.center, css.trBreak);
+                headers += sprintf("<td rowspan=%i id='%s' class='%s %s'>", css.nRows, id, textAlign, css.trBreak);
             }
             
             // add editable text into cell
@@ -234,6 +236,7 @@ gsatf.factory("gsatfFactory", function() {
         
         // iterate through remaining rows, and process
         for (var i = 0; i < table.body.length; i++) {
+            
             var row = table.body[i];
             bodyHtml += "<tr>";
             
@@ -248,9 +251,11 @@ gsatf.factory("gsatfFactory", function() {
                 
                 // loop through and process 
                 for (var j = 0; j < table.body[i].length; j++) {
+                    var textAlign = j == 0 ? css.left : css.center;
+                    
                     var I = i < 10 ? "0"+i.toString() : i.toString();
                     var J = j < 10 ? "0"+j.toString() : j.toString();
-                    bodyHtml += sprintf("<td id='%s' class='%s %s'><span editable-text='table.body[%i][%i]'>%s</span></td>", I+J, css.tdBody, css.center, i, j, "{{ table.body[" + i + "][" + j + "] }}");
+                    bodyHtml += sprintf("<td id='%s' class='%s %s'><span editable-text='table.body[%i][%i]'>%s</span></td>", I+J, css.tdBody, textAlign, i, j, "{{ table.body[" + i + "][" + j + "] }}");
                 }
             }
                 
