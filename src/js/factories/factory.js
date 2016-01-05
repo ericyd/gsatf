@@ -9,7 +9,12 @@ gsatf.factory("gsatfFactory", function() {
     var factory = {};
     var table = {
         title: "",
-        headers: [[],[],[],[]],
+        headers: {
+            heads: [],
+            headDimensions: [],
+            subheads: [],
+            subheadDimensions: [] 
+        },
         body: [],
         footnotes: []
     };
@@ -30,18 +35,24 @@ gsatf.factory("gsatfFactory", function() {
         nRows: 1
     };
     
+    
+    // is this needed? eliminate?
     factory.getTable = function() {
         return table;
     };
     
     
     
+    /* extractData is passed the text from the textarea.
+    It parses this data and fills the variable `table` with the relevant parts,
+    so that buildHtml() can create the proper table from the correct data
+    */
     factory.extractData = function(data) {
         var isFilled = function(x) { return x !== ""; };
         var isNotComment = function(x) { return (x[0] != "#" && x.slice(0,2) != "//"); };
         var reFootnoteInc = /\*\d+/; //inclusive
         var reFoodnoteExc = /\*(\d+)/; //exclusive
-        var reSubhead = /\[.*\]/;
+        var reSubhead = /\[(.*)\]/;
         var reDimension = /(\(.*\))/;
         
         // split each row into an array
@@ -68,44 +79,64 @@ gsatf.factory("gsatfFactory", function() {
         // one element in first row indicates that its a built-in title
         if (data[0].length == 1) {
             table.title = data.shift()[0];
+            
         // more than one element indicates that its the headers; less than one is likely an error
         } else {
             table.title += "Title 1."; 
         }
         
+        
+        
         // Get headers row
         var headers = data.shift();
         
         // split headers into the title and any corresponding dimensions
-        for (var j = 0; j < headers.length; j++) {
+        // todo: figure out why I need the "-1" in the `for` declaration - it seems hacky
+        for (var i = 0; i < headers.length - 1; i++) {
+            
             // test the heading for subheads
-            if ( reSubhead.test(headers[j]) ) {
-                table.headers[0][j] = headers[j].slice(0, headers[j].search(reSubhead));
-                table.headers[2][j] = headers[j].match(reSubhead)[0].split(",");
+            if ( reSubhead.test(headers[i]) ) {
+                table.headers.heads[i] = headers[i].slice(0, headers[i].search(reSubhead));
+                table.headers.subheads[i] = headers[i].match(reSubhead)[1].split(",");
                 css.nRows = 2;
-                for (var i = 0; i < table.headers[2][j].length; i++) {
-                    if ( reDimension.test(table.headers[2][j][i]) ) {
-                        table.headers[3][j] = [];
-                        table.headers[3][j][i] = table.headers[2][j][i].match(reDimension)[0];
-                        table.headers[2][j][i] = table.headers[2][j][i].slice(0, table.headers[2][j][i].search(reDimension));
+                
+                // loop through the subheads and separate dimensions
+                for (var j = 0; j < table.headers.subheads[i].length; j++) {
+                    
+                    // if subhead contains reDimension
+                    if ( reDimension.test(table.headers.subheads[i][j]) ) {
+                        
+                        // create an array to hold subheadDimensions only if it doesn't exist
+                        if (table.headers.subheadDimensions[i] === undefined) {
+                            table.headers.subheadDimensions[i] = [];    
+                        } 
+                        
+                        // fill the subheadDimensions
+                        table.headers.subheadDimensions[i][j] = table.headers.subheads[i][j].match(reDimension)[0];
+                        table.headers.subheads[i][j] = table.headers.subheads[i][j].slice(0, table.headers.subheads[i][j].search(reDimension));
                     }
                 }
             } else {
-                table.headers[0][j] = headers[j];
+                
+                table.headers.heads[i] = headers[i];
             }
             
             // test the heading for dimensions
-            if ( reDimension.test(headers[j]) ) {
-                table.headers[1][j] = table.headers[0][j].match(reDimension)[0];
-                table.headers[0][j] = table.headers[0][j].slice(0, headers[j].search(reDimension));
+            if ( reDimension.test(headers[i]) ) {
+                table.headers.headDimensions[i] = table.headers.heads[i].match(reDimension)[0];
+                table.headers.heads[i] = table.headers.heads[i].slice(0, headers[i].search(reDimension));
             }
             
         }
+        
+        
         
         // The remaining data is the body
         table.body = data;
         
     } // function extractData
+    
+    
     
     
     /* buildHtml returns a string of the html table
@@ -137,43 +168,43 @@ gsatf.factory("gsatfFactory", function() {
         var headers = "<tr>";
         
         // iterate through headings
-        for (var j = 0; j < table.headers[0].length; j++) {
-            var id = j < 10 ? "010" + j.toString() : "01" + j.toString();
+        for (var i = 0; i < table.headers.heads.length; i++) {
+            var id = i < 10 ? "010" + i.toString() : "01" + i.toString();
             
             // if there are subheadings
-            if (table.headers[2][j] !== undefined) {
+            if (table.headers.subheads[i] !== undefined) {
                 // no rowspan
-                headers += sprintf("<td colspan=%i id='%s' class='%s %s'>", table.headers[2][j].length, id, css.center, css.trBreak);
+                headers += sprintf("<td colspan=%i id='%s' class='%s %s'>", table.headers.subheads[i].length, id, css.center, css.trBreak);
             } else {
                 // yes rowspan
                 headers += sprintf("<td rowspan=%i id='%s' class='%s %s'>", css.nRows, id, css.center, css.trBreak);
             }
             
             // add editable text into cell
-            headers += sprintf("<span editable-text='table.headers[0][%i]'>{{ table.headers[0][%i] }}</span>", j, j);
+            headers += sprintf("<span editable-text='table.headers.heads[%i]'>{{ table.headers.heads[%i] }}</span>", i, i);
             
             // if there is a corresponding dimension for the header, print it on a separate line
-            if (table.headers[1][j] !== undefined ) {
-                headers += sprintf("<br /><span editable-text='table.headers[1][%i]'>{{ table.headers[1][%i] }}</span>", j, j);
+            if (table.headers.headDimensions[i] !== undefined ) {
+                headers += sprintf("<br /><span editable-text='table.headers.headDimensions[%i]'>{{ table.headers.headDimensions[%i] }}</span>", i, i);
             }
             
                             
             // if there are subheadings
-            if (table.headers[2][j] !== undefined) {
+            if (table.headers.subheads[i] !== undefined) {
                                 
                 // add second row (subheading)
                 headers += "<tr>";
                 
                 // iterate through items in subheadings array
                 
-                for (var i = 0; i < table.headers[2][j].length; i++) {
+                for (var j = 0; j < table.headers.subheads[i].length; j++) {
                     
                     headers += sprintf("<td class='%(center)s %(trBreak)s'>", css);
-                    headers += sprintf("<span editable-text='table.headers[2][%i][%i]'>{{ table.headers[2][%i][%i] }}</span>", j, i, j, i);
+                    headers += sprintf("<span editable-text='table.headers.subheads[%i][%i]'>{{ table.headers.subheads[%i][%i] }}</span>", i, j, i, j);
                     
                     // if there is a corresponding dimension for the subheader, print it on a separate line
-                    if (table.headers[3][j] !== undefined ) {
-                        headers += sprintf("<br /><span editable-text='table.headers[3][%i]'>{{ table.headers[3][%i] }}</span>", j, j);
+                    if (table.headers.subheadDimensions[i] !== undefined ) {
+                        headers += sprintf("<br /><span editable-text='table.headers.subheadDimensions[%i][%i]'>{{ table.headers.subheadDimensions[%i][%i] }}</span>", i, j, i, j);
                     }                    
                 }
                 
@@ -199,16 +230,18 @@ gsatf.factory("gsatfFactory", function() {
             var row = table.body[i];
             bodyHtml += "<tr>";
             
-            // if its not the first or last line of the table...
+            // if its not the first or last line of the table
             if ( i != table.body.length - 1 ) {
 
+                // if there's only a single element in the row
                 if (table.body[i].length == 1) {
                     var id = i < 10 ? "0" + i.toString() + "00" : i.toString();
                     bodyHtml += sprintf("<td id='%s' colspan='%s' class='%s %s'><span editable-text='table.body[%s][0]'>", id, css.nCols, css.tdSubhead, i);
-                    bodyHtml += "{{ table.body[" + i + "][0] }}" + "</span></td></tr>";
+                    bodyHtml += sprintf("{{ table.body[%s][0] }}</span></td></tr>", i);
                     continue;
-                }
+                } 
                 
+                // loop through and process 
                 for (var j = 0; j < table.body[i].length; j++) {
                     var I = i < 10 ? "0"+i.toString() : i.toString();
                     var J = j < 10 ? "0"+j.toString() : j.toString();
