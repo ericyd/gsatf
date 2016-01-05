@@ -6,12 +6,13 @@
 1. Add animations between views
 2. Adjust colors/theme for app (bootstrap)
 3. css 
-    1. Rename css styles for cells to make them more intuitive
+    1. Rename css styles for cells to make them more intuitive (e.g. "borderTop" has a border on top)
 5. Finish parser
     1. Parse footnotes on each cell, denoted either by \*1, \*2, \*3 etc or ^1 ^2 ^3 etc
-    2. parse headings with sub-headings (e.g. Coords [Lat, Long]) with syntax where [el1, el2, el3] indicates sub-heads
-    3. First column of TDs should be text-align: left, not center
-    4. make "#" characters comments.  Make "//" an automatic table "Note" (see #12 in booktable.pdf).  Also make "Note:etc." a footnote if row.length == 1
+    5. Make "//" an automatic table "Note" (see #12 in booktable.pdf).  Also make "Note:etc." a footnote if row.length == 1
+    3. ~~First column of TDs should be text-align: left, not center~~
+    4. ~~make "#" characters comments.~~  
+    2. ~~parse headings with sub-headings (e.g. Coords [Lat, Long]) with syntax where [el1, el2, el3] indicates sub-heads~~
     5. ~~add cell padding~~
     6. ~~decrease font size~~
 6. integrate angular xeditable
