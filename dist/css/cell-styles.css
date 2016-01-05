@@ -1,6 +1,50 @@
-.trTitle {border-bottom:3px double #000;height:1em;}
-.trBreak {border-bottom:1px solid #000;}
-.tdTitle {text-transform:uppercase;}
-.tdCenter {text-align:center;}
-.tdSubhead {text-decoration:underline; text-align:left;}
-.tdAll {text-align:center;padding:0 0 0 1em;text-indent:-1em;max-width:15em;}
+td {
+    padding: 0.5em 1em;
+    font-size:12px;
+}
+
+.trTitle {
+    border-bottom:3px double #000;
+    height:1em;
+}
+
+.trBreak {
+    border-bottom:1px solid #000;
+}
+
+.tdTitle {
+    text-transform:uppercase;
+}
+
+.tdCenter {
+    text-align:center;
+}
+
+.tdSubhead {
+    text-decoration:underline; 
+    text-align:left;
+}
+
+.tdBody {
+    /* todo: make this value change programatically 
+    1em larger than standard td padding*/
+    padding-left:2em;
+    text-indent:-1em;
+    max-width:15em;
+}
+    
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.borderTop {
+    border-top: 1px solid #000;
+}
