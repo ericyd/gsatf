@@ -137,6 +137,21 @@ gsatf.factory("gsatfFactory", function() {
     
     // declare css variables
     var css = {
+        trTitle: "border-bottom:3px double #000;height:1em;",
+        trBreak: "border-bottom:1px solid #000;",
+        tdTitle: "text-transform:uppercase;", //font-weight:bold; (apparently not in the specs)
+        center: "text-align: center;",
+        left: "text-align: left;",
+        right: "text-align: right;",
+        tdSubhead: "text-decoration:underline; text-align:left;",
+        tdBody: "padding-left:2em;text-indent:-1em;max-width:15em;",
+        borderTop: "border-top: 1px solid #000;",
+        nCols: 0, // updated in script
+        nRows: 1
+    };
+    
+    /* used for css classes, which don't transfer to word processors, and are therefore useless
+    var css = {
         trTitle: "trTitle",
         trBreak: "trBreak",
         tdTitle: "tdTitle", //font-weight:bold; (apparently not in the specs)
@@ -149,6 +164,7 @@ gsatf.factory("gsatfFactory", function() {
         nCols: 0, // updated in script
         nRows: 1
     };
+    */
     
     
     // is this needed? eliminate?
@@ -185,7 +201,6 @@ gsatf.factory("gsatfFactory", function() {
                 data[i] = data_filter;
             }
         }
-        
         
         // find max row length (= num of cols) - note: slice() effectively creates a copy of data, so the sorting doesn't affect the table
         css.nCols = data.slice().sort(function (a, b) { return b.length - a.length; })[0].length;
@@ -249,6 +264,10 @@ gsatf.factory("gsatfFactory", function() {
         // The remaining data is the body
         table.body = data;
         
+        while (table.body[table.body.length-1].length < css.nCols) {
+            table.body[table.body.length-1].push("");
+        }
+        
     } // function extractData
     
     
@@ -272,7 +291,7 @@ gsatf.factory("gsatfFactory", function() {
 
     function getTitle() {
         // set up html for first row
-        var head = sprintf("<tr><td id='0000' colspan='%(nCols)i' class='%(tdTitle)s %(center)s %(trTitle)s'><span editable-text='table.title'>", css);
+        var head = sprintf("<tr><td id='0000' colspan='%(nCols)i' style='%(tdTitle)s %(center)s %(trTitle)s'><span editable-text='table.title'>", css);
         var tail = "</span></td></tr>";
         return head + "{{ table.title }}" + tail;
     }
@@ -295,10 +314,10 @@ gsatf.factory("gsatfFactory", function() {
             // if there are subheadings
             if (table.headers.subheads[i] !== undefined) {
                 // no rowspan
-                headers += sprintf("<td colspan=%i id='%s' class='%s %s'>", table.headers.subheads[i].length, id, textAlign, css.trBreak);
+                headers += sprintf("<td colspan=%i id='%s' style='%s %s'>", table.headers.subheads[i].length, id, textAlign, css.trBreak);
             } else {
                 // yes rowspan
-                headers += sprintf("<td rowspan=%i id='%s' class='%s %s'>", css.nRows, id, textAlign, css.trBreak);
+                headers += sprintf("<td rowspan=%i id='%s' style='%s %s'>", css.nRows, id, textAlign, css.trBreak);
             }
             
             // add editable text into cell
@@ -320,7 +339,7 @@ gsatf.factory("gsatfFactory", function() {
                 
                 for (var j = 0; j < table.headers.subheads[i].length; j++) {
                     
-                    headers += sprintf("<td class='%(center)s %(trBreak)s'>", css);
+                    headers += sprintf("<td style='%(center)s %(trBreak)s'>", css);
                     headers += sprintf("<span editable-text='table.headers.subheads[%i][%i]'>{{ table.headers.subheads[%i][%i] }}</span>", i, j, i, j);
                     
                     // if there is a corresponding dimension for the subheader, print it on a separate line
@@ -354,14 +373,8 @@ gsatf.factory("gsatfFactory", function() {
             var row = table.body[i];
             bodyHtml += "<tr>";
             
-            // if there's only a single element in the row
-            if (table.body[i].length == 1) {
-                
-                var id = i < 10 ? "0" + i.toString() + "00" : i.toString() + "00";
-                bodyHtml += sprintf("<td id='%s' colspan=%s class='%s'><span editable-text='table.body[%s][0]'>", id, css.nCols, css.tdSubhead, i);
-                bodyHtml += sprintf("{{ table.body[%s][0] }}</span></td></tr>", i);
-                
-            } else {
+            // if last row
+            if (i == table.body.length - 1) {
                 
                 // loop through and process 
                 for (var j = 0; j < table.body[i].length; j++) {
@@ -369,9 +382,32 @@ gsatf.factory("gsatfFactory", function() {
                     
                     var I = i < 10 ? "0"+i.toString() : i.toString();
                     var J = j < 10 ? "0"+j.toString() : j.toString();
-                    bodyHtml += sprintf("<td id='%s' class='%s %s'><span editable-text='table.body[%i][%i]'>%s</span></td>", I+J, css.tdBody, textAlign, i, j, "{{ table.body[" + i + "][" + j + "] }}");
+                    bodyHtml += sprintf("<td id='%s' style='%s %s %s'><span editable-text='table.body[%i][%i]'>%s</span></td>", I+J, css.tdBody, textAlign, css.trBreak, i, j, "{{ table.body[" + i + "][" + j + "] }}");
+                }
+                
+            // all other rows    
+            } else {
+                
+                // if there's only a single element in the row
+                if (table.body[i].length == 1) {
+                    
+                    var id = i < 10 ? "0" + i.toString() + "00" : i.toString() + "00";
+                    bodyHtml += sprintf("<td id='%s' colspan=%s style='%s'><span editable-text='table.body[%s][0]'>", id, css.nCols, css.tdSubhead, i);
+                    bodyHtml += sprintf("{{ table.body[%s][0] }}</span></td></tr>", i);
+                    
+                } else {
+                    
+                    // loop through and process 
+                    for (var j = 0; j < table.body[i].length; j++) {
+                        var textAlign = j == 0 ? css.left : css.center;
+                        
+                        var I = i < 10 ? "0"+i.toString() : i.toString();
+                        var J = j < 10 ? "0"+j.toString() : j.toString();
+                        bodyHtml += sprintf("<td id='%s' style='%s %s'><span editable-text='table.body[%i][%i]'>%s</span></td>", I+J, css.tdBody, textAlign, i, j, "{{ table.body[" + i + "][" + j + "] }}");
+                    }
                 }
             }
+
                 
 
             bodyHtml += "</tr>";
@@ -383,7 +419,7 @@ gsatf.factory("gsatfFactory", function() {
     
     
     function getFootnotes() {
-        var html = sprintf("<tr><td colspan=%i class='%s'></td></tr>", css.nCols, css.borderTop);
+        var html = ""; //sprintf("<tr><td colspan=%i style='%s'></td></tr>", css.nCols, css.borderTop);
         
         return html;
     }
@@ -392,3 +428,17 @@ gsatf.factory("gsatfFactory", function() {
     
     return factory;
 });
+//http://stackoverflow.com/questions/1173194/select-all-div-text-with-single-mouse-click
+
+function selectText(containerid) {
+    if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNode(document.getElementById(containerid));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+    } else if (document.selection) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(document.getElementById(containerid));
+        range.select();
+    }  
+}
