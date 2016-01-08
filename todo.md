@@ -10,6 +10,7 @@
 5. Finish parser
     1. Parse footnotes on each cell, denoted either by \*1, \*2, \*3 etc or ^1 ^2 ^3 etc
     5. Make "//" an automatic table "Note" (see #12 in booktable.pdf).  Also make "Note:etc." a footnote if row.length == 1
+    2. CSS: Add a css.td property.  Include "font-family:sans-serif;font-size:12px;padding:1em 0.5em;".  Apply to ALL CELLS
     3. ~~First column of TDs should be text-align: left, not center~~
     4. ~~make "#" characters comments.~~  
     2. ~~parse headings with sub-headings (e.g. Coords [Lat, Long]) with syntax where [el1, el2, el3] indicates sub-heads~~
@@ -17,6 +18,7 @@
     6. ~~decrease font size~~
 6. integrate angular xeditable
     2. add ability to adjust text-alignment
+        * Note: this will **have** to change the text of the "style" tag.  Classes don't get transferred when copied into a word processor.
     3. Add ability to insert Greek characters into text (?)
     4. Add ability to add footnotes (maybe won't requite xeditable?)
     1. ~~make cell contents editable~~
