@@ -30,7 +30,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('browserify', function() {
-    globby(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js']).then(function(entries) {
+    globby(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js', 'src/js/*.js']).then(function(entries) {
         var b = browserify({
             entries: ['./src/js/requires.js'],
             debug: true
@@ -52,7 +52,7 @@ gulp.task('js', function() {
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
 
-    return gulp.src(['./src/js/controllers/*.js', './src/js/directives/*.js', './src/js/factories/*.js'])
+    return gulp.src(['./src/js/controllers/*.js', './src/js/directives/*.js', './src/js/factories/*.js', './src/js/*.js'])
         // looks for errors and prints them
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
