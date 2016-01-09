@@ -5,11 +5,16 @@ var gsatf = angular.module("gsaTableFormatter", ['ngRoute', 'xeditable']);
 
 /*
 options for xeditable
-
-gsatf.run(function(editableOptions) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-});
 */
+gsatf.run(function(editableOptions, editableThemes) {
+  editableThemes.bs3.inputClass = 'input-sm';
+  editableThemes.bs3.buttonsClass = 'btn-sm';
+  editableOptions.theme = 'bs3';
+  
+  
+  
+});
+
 
 /*
 CONTROLLER
