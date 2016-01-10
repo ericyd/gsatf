@@ -4,7 +4,7 @@ Geological Society of America Table Formatter (GSATF) is a tool to format data t
 
 --------
 
-## Usage ## 
+## Usage ##
 
 The app is divided into two major steps:
 
