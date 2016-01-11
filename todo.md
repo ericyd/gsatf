@@ -3,6 +3,7 @@
 ### GSATF work
 
 0. Possibly: make whole table an editable table, and have hidden checkboxes show up for each element that allows for a footnote to be added.  Possibly could also include hidden controls such as text alignment?  See the xeditable site for details on how to make an editable table with hidden values that show on edit
+00. In headings, "Location" only takes up one cell and leaves the other one blank.  The second cell is for the second sub-head, but isn't needed in the table.header.heads row.  Find a way to remove this (if present) but skip it if its already been merged in the spreadsheet.
 1. Angular
     1. Add animations between views
 2. Gulp

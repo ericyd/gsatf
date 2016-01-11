@@ -41,6 +41,43 @@ Every cell in the formatted table is editable by simply clicking on the contents
 
 Data tables often have comments regarding the collection and explanation of the data.  Comments will be automatically removed from inserted data if the line begins with a `#` character or two forward slash characters, `//`.
 
+### Automatic parsing of headings ###
+
+GSATF will parse the column headers and automatically take the dimension (units) of the column and place it on a separate line, per the GSA standards.  For this to work properly, dimenions (units) for columns must be enclosed in parentheses, `()`.  Some examples are shown below:
+
+| Text             | Formatted output      |
+|------------------|-----------------------|
+| Length (m)       | Length <br> (m)       |
+| Mass (kg)        | Mass <br> (kg)        |
+| Area (m^2)       | Area <br> (m^2)       |
+| Density (kg/m^3) | Density <br> (kg/m^3) |
+
+Please note that at this time, superscripts and subscripts are not processes, and will remain as plain text:
+
+In addition, headings that are divided into two or more subheadings _can_ be automatically split if the table is entered with a specific syntax.  The subheadings for a given heading must be entered in square brackets, `[]` after the main heading.  Each subheading must be separated by commas.  Below is an example of how to enter this:
+
+<table>
+    <tr>
+        <th>Text</th>
+        <th>Formatted output</th>
+    </tr>
+    <tr>
+        <td>
+            Location [Lat (degrees), Long (degrees)]
+        </td>
+        <td style="text-align:center" colspan="2">
+            Location
+            <table>
+                <tr style="border-top:1px solid #000;">
+                    <td>Lat<br>(degrees)</td>
+                    <td>Long<br>(degrees)</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+ 
+
 ## Current limitations ##
 
 This software is currently in development.  As such, there are a few notable limitations in its performance.
