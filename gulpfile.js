@@ -1,25 +1,34 @@
-// from my limited understanding, the `require()` method returns a module, defined by the argument
-
-var gulp = require('gulp'),
-    uglify = require('gulp-uglify'),
-    jshint = require('gulp-jshint'),
-    concat = require('gulp-concat'),
-    htmlmin = require('gulp-htmlmin'),
-    cssmin = require('gulp-minify-css'),
-    changed = require('gulp-changed'),
-    sass = require('gulp-sass'),
-    browserify = require('browserify'),
-    globby = require('globby'),
-    buffer = require('vinyl-buffer'),
-    source = require('vinyl-source-stream'),
-    through = require('through2')
-    dest = './dist';
+var gulp = require('gulp');
+var uglify = require('gulp-uglify');
+var jshint = require('gulp-jshint');
+var concat = require('gulp-concat');
+var htmlmin = require('gulp-htmlmin');
+var cssmin = require('gulp-minify-css');
+var changed = require('gulp-changed');
+var sass = require('gulp-sass');
+var browserify = require('browserify');
+var globby = require('globby');
+var buffer = require('vinyl-buffer');
+var source = require('vinyl-source-stream');
+var through = require('through2');
+var dest = './dist';
     
+
+
+
 
 
 gulp.task('default', function() {
     return; 
 });
+
+
+
+
+gulp.task('build', ['jslint', 'js', 'css', 'html']);
+
+
+
 
 gulp.task('watch', function(){
     var watcher = gulp.watch(['./src/**/*'], ['build']);
@@ -28,6 +37,9 @@ gulp.task('watch', function(){
         console.log('Event path: ' + event.path); // The path of the modified file
     });
 });
+
+
+
 
 gulp.task('browserify', function() {
     globby(['src/js/controllers/*.js', 'src/js/directives/*.js', 'src/js/factories/*.js', 'src/js/*.js']).then(function(entries) {
@@ -46,27 +58,25 @@ gulp.task('browserify', function() {
     
 });
     
+    
+    
+    
 gulp.task('js', function() {
-    // define what the task 'minify' actually does
     gulp.src('./src/js/assets/*.js', { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
 
     return gulp.src(['./src/js/controllers/*.js', './src/js/directives/*.js', './src/js/factories/*.js', './src/js/*.js'])
-        // looks for errors and prints them
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
-        // minifies the contents with uglify
         .pipe(uglify())
-        // concatenates all js files into one main file named 'main.js'
         .pipe(concat('app.js'))
-        // pipes the output to the destination folder
         .pipe(gulp.dest('dist/js'));
     
 });
 
+
+
+
 gulp.task('css', function() {
-    // move unchaged files to final location
     gulp.src('./src/css/**/*.min.css', { base: 'src' })
         .pipe(changed(dest))
         .pipe(gulp.dest(dest));
@@ -80,6 +90,9 @@ gulp.task('css', function() {
         .pipe(concat('main.css'))
         .pipe(gulp.dest(dest));
 });
+
+
+
 
 gulp.task('html', function() {
     
@@ -95,4 +108,11 @@ gulp.task('html', function() {
         
 });
 
-gulp.task('build', ['js', 'css', 'html']);
+
+
+
+gulp.task('jslint', function() {
+    return gulp.src()
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
+})
