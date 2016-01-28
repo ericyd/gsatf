@@ -13,7 +13,7 @@ gulp.task('default', function() {
 
 
 gulp.task('watch', function(){
-    var watcher = gulp.watch(['./src/**/*'], ['js']);
+    var watcher = gulp.watch(['./es6/**/*'], ['js']);
     watcher.on('change', function (event) {
         console.log(event.type + ": " + event.path);
     });
@@ -21,14 +21,14 @@ gulp.task('watch', function(){
 
 
 gulp.task('js', function() {
-    return gulp.src('./src/**/*.js')
+    return gulp.src('./es6/**/*.js')
         .pipe(babel({
             presets: ['es2015']
         }))
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
         .pipe(concat('tests.js'))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./es5'));
     
 });
 
