@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
-var concat = require('gulp-concat');
 var babel = require('gulp-babel');
 
 
@@ -27,7 +26,6 @@ gulp.task('js', function() {
         }))
         .pipe(jshint())
         .pipe(jshint.reporter('default'))
-        .pipe(concat('tests.js'))
         .pipe(gulp.dest('./es5'));
     
 });
